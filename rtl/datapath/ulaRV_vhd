@@ -1,0 +1,77 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use work.pkg.all;
+
+entity ulaRV is
+    generic (
+        WSIZE : natural := WORD_WIDTH
+    );
+    port (
+        opcode : in  std_logic_vector(3 downto 0);
+        A, B   : in  std_logic_vector(WSIZE-1 downto 0);
+        Z      : out std_logic_vector(WSIZE-1 downto 0);
+        cond   : out std_logic;
+        zero   : out std_logic
+    );
+end entity ulaRV;
+
+architecture rtl of ulaRV is
+begin
+    process(opcode, A, B)
+        variable res_v   : std_logic_vector(WSIZE-1 downto 0);
+        variable cond_v  : std_logic;
+        variable shamt_v : integer range 0 to 31;
+    begin
+        res_v   := (others => '0');
+        cond_v  := '0';
+        shamt_v := to_integer(unsigned(B(4 downto 0)));
+
+        case opcode is
+            -- Deslocamento logico a esquerda: Z = A << B[4:0] (SLL)
+            when ALU_SLL =>
+                res_v := std_logic_vector(shift_left(unsigned(A), shamt_v));
+
+            -- Deslocamento logico a direita: Z = A >>u B[4:0] (SRL)
+            when ALU_SRL =>
+                res_v := std_logic_vector(shift_right(unsigned(A), shamt_v));
+
+            -- Deslocamento aritmetico a direita: Z = A >> B[4:0] (SRA)
+            when ALU_SRA =>
+                res_v := std_logic_vector(shift_right(signed(A), shamt_v));
+
+            -- Comparacao com sinal: Z = (A < B) ? 1 : 0 (SLTi / SLT)
+            when ALU_SLT =>
+                if signed(A) < signed(B) then
+                    res_v  := std_logic_vector(to_unsigned(1, WSIZE));
+                    cond_v := '1';
+                else
+                    res_v  := (others => '0');
+                    cond_v := '0';
+                end if;
+
+            -- Comparacao sem sinal: Z = (A <u B) ? 1 : 0 (SLTU / SLTIU)
+            when ALU_SLTU =>
+                if unsigned(A) < unsigned(B) then
+                    res_v  := std_logic_vector(to_unsigned(1, WSIZE));
+                    cond_v := '1';
+                else
+                    res_v  := (others => '0');
+                    cond_v := '0';
+                end if;
+
+            when others =>
+                res_v  := (others => '0');
+                cond_v := '0';
+        end case;
+
+        Z    <= res_v;
+        cond <= cond_v;
+
+        if res_v = std_logic_vector(to_unsigned(0, WSIZE)) then
+            zero <= '1';
+        else
+            zero <= '0';
+        end if;
+    end process;
+end architecture rtl;
