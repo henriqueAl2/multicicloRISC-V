@@ -1,0 +1,9 @@
+v 4
+file / "C:\Users\mavim\.copilot\session-state\691af292-ad0f-4ee3-af2b-ec798e9ff84d\files\tb_controle_ula.vhd" "7f2cbdc060221830808aeb9a493dfcb53d0dde00" "20261123211916.783":
+  entity tb_controle_ula at 1( 0) + 0 on 17;
+  architecture sim of tb_controle_ula at 8( 108) + 0 on 18;
+file . "packages/pkg.vhdl" "a8735d41b1e6516eeb75c69cc2d043955646dd35" "20261123211916.697":
+  package pkg at 1( 0) + 0 on 14;
+file . "rtl/control/ula_control.vhd" "917443bf3765f8bfd685f1bd3cc1e8be026ca26d" "20261123211916.740":
+  entity controle_ula at 1( 0) + 0 on 15;
+  architecture rtl of controle_ula at 14( 346) + 0 on 16;
