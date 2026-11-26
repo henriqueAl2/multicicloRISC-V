@@ -7,7 +7,7 @@ package pkg is
     --Constantes de configuração do processador. Um define o tamanho da arquitetura, o outro define os endereços dos registradores e o último define a profundidade da memória.
     constant WORD_WIDTH : natural := 32;
     constant REG_ADDR_W : natural := 5;
-    constant MEM_DEPTH  : natural := 256;
+    constant MEM_DEPTH  : natural := 4096;
 
     --Opcode das instruções
     constant OP_R_TYPE  : std_logic_vector(6 downto 0) := "0110011";
@@ -18,6 +18,7 @@ package pkg is
     constant OP_JAL     : std_logic_vector(6 downto 0) := "1101111";
     constant OP_JALR    : std_logic_vector(6 downto 0) := "1100111";
     constant OP_LUI     : std_logic_vector(6 downto 0) := "0110111";
+    constant OP_AUIPC   : std_logic_vector(6 downto 0) := "0010111";
 
     --Controle da ULA
     constant ALU_ADD    : std_logic_vector(3 downto 0) := "0000";
@@ -46,7 +47,7 @@ package pkg is
             clk   : in  std_logic;
             rst   : in  std_logic;
             en    : in  std_logic;
-            dado     : in  std_logic_vector(WIDTH-1 downto 0); 
+            d     : in  std_logic_vector(WIDTH-1 downto 0);
             q     : out std_logic_vector(WIDTH-1 downto 0)
         );
     end component;
