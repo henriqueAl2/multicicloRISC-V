@@ -189,7 +189,7 @@ begin
                 EscrevePC  <= '1';
 
             when S_LUI =>
-                OrigAULA <= "01";
+                OrigAULA <= "11";
                 OrigBULA <= "10";
                 ALUOp    <= "00";
 
